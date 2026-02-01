@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ma Valentine ?</title>
+    <title>Pour ma Valentine ❤️</title>
     <style>
+        /* Fond avec un dégradé doux */
         body {
             display: flex;
             flex-direction: column;
@@ -12,57 +13,90 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Arial', sans-serif;
-            background-color: #ffe6e6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7e2 100%);
             overflow: hidden;
+            text-align: center;
         }
 
+        /* Animation de flottement pour le titre */
         h1 {
-            color: #d63384;
-            font-size: 2.5rem;
-            text-align: center;
+            color: #d53f8c;
+            font-size: 2.2rem;
+            margin-top: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
         .container {
             position: relative;
             width: 100%;
-            height: 200px;
+            height: 150px;
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 20px;
         }
 
+        /* Style des boutons plus "boutons de bonbons" */
         button {
-            padding: 15px 30px;
+            padding: 15px 35px;
             font-size: 1.2rem;
+            font-weight: bold;
             border: none;
-            border-radius: 50px;
+            border-radius: 30px;
             cursor: pointer;
-            transition: transform 0.2s;
-            position: absolute;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
 
         #yesBtn {
-            background-color: #ff4d6d;
+            background-color: #f687b3;
             color: white;
-            transform: translateX(-70px);
+            z-index: 10;
+        }
+
+        #yesBtn:hover {
+            background-color: #ed64a6;
+            transform: scale(1.1);
         }
 
         #noBtn {
-            background-color: #adb5bd;
-            color: white;
-            transform: translateX(70px);
+            background-color: #cbd5e0;
+            color: #4a5568;
+            position: absolute; /* Important pour qu'il puisse bouger partout */
         }
 
-        .gif-container {
-            margin-bottom: 20px;
+        .gif-container img {
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 250px;
+        }
+
+        /* Petits cœurs qui flottent en arrière-plan */
+        .heart {
+            position: fixed;
+            top: -10vh;
+            font-size: 20px;
+            user-select: none;
+            z-index: -1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh); }
         }
     </style>
 </head>
 <body>
 
     <div class="gif-container">
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp4Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5JmNoYXRfaWQ9MTI3NjQyJmN0PWc/c76IJLufpNwSULPk2m/giphy.gif" alt="Cute cat" width="200">
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHp4Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5JmNoYXRfaWQ9MTI3NjQyJmN0PWc/c76IJLufpNwSULPk2m/giphy.gif" alt="Mimi">
     </div>
 
     <h1>Veux-tu être ma Valentine ? ❤️</h1>
@@ -74,28 +108,41 @@
 
     <script>
         const noBtn = document.getElementById('noBtn');
-        const yesBtn = document.getElementById('yesBtn');
 
-        // Fonction pour faire fuir le bouton "Non"
-        noBtn.addEventListener('mouseover', () => {
+        // Faire fuir le bouton "Non" de manière plus fluide
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', moveButton); // Pour mobile aussi !
+
+        function moveButton() {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
             
-            noBtn.style.position = 'absolute';
             noBtn.style.left = `${x}px`;
             noBtn.style.top = `${y}px`;
-        });
+        }
 
-        // Action quand elle clique sur "Oui"
         function celebrate() {
+            // Effet de pluie de cœurs
+            setInterval(createHeart, 300);
+
             document.body.innerHTML = `
-                <div style="text-align:center;">
-                    <h1 style="font-size: 4rem;">YAY ! 😍</h1>
-                    <p style="font-size: 1.5rem; color: #d63384;">Je savais que tu ne pourrais pas résister !</p>
-                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGp3Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5JmNoYXRfaWQ9MTI3NjQyJmN0PWc/KztT2c4u8mYYUiMKdJ/giphy.gif" width="300">
+                <div style="text-align:center; animation: fadeIn 1s;">
+                    <h1 style="font-size: 3rem;">YAY ! 💖</h1>
+                    <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOGp3Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5Z3R5JmNoYXRfaWQ9MTI3NjQyJmN0PWc/KztT2c4u8mYYUiMKdJ/giphy.gif" style="border-radius:20px; width:300px;">
+                    <p style="font-size: 1.8rem; color: #d53f8c; font-weight: bold; margin-top: 20px;">Je t'aime ! On se voit le 14 ? 🥰</p>
                 </div>
             `;
-            document.body.style.backgroundColor = "#ffc1cf";
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.opacity = Math.random();
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
         }
     </script>
 </body>
