@@ -22,12 +22,13 @@
             color: #d53f8c;
             font-size: 2rem;
             margin: 20px;
+            z-index: 1;
         }
 
         .container {
             position: relative;
             width: 100%;
-            height: 100px;
+            height: 300px; /* Plus d'espace pour que le bouton bouge */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -41,31 +42,33 @@
             border-radius: 30px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: all 0.2s ease;
+            position: absolute; /* Position absolue pour les deux */
+            transition: all 0.1s ease;
         }
 
         #yesBtn {
             background-color: #f687b3;
             color: white;
-            margin-right: 20px;
+            transform: translateX(-80px); /* Décalé à gauche par défaut */
         }
 
         #noBtn {
             background-color: #cbd5e0;
             color: #4a5568;
-            position: absolute; /* Indispensable pour bouger */
+            transform: translateX(80px); /* Décalé à droite par défaut */
         }
 
         .gif-container img {
             border-radius: 20px;
-            max-width: 220px;
+            max-width: 200px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
         .heart {
             position: fixed;
             top: -10vh;
             font-size: 20px;
-            z-index: -1;
+            z-index: 0;
             animation: fall linear forwards;
         }
 
@@ -82,7 +85,7 @@
 
     <h1>Veux-tu être ma Valentine ? ❤️</h1>
 
-    <div class="container" id="mainContainer">
+    <div class="container">
         <button id="yesBtn" onclick="celebrate()">OUI !</button>
         <button id="noBtn">Non</button>
     </div>
@@ -91,28 +94,41 @@
         const noBtn = document.getElementById('noBtn');
 
         function moveButton() {
-            // On calcule une position aléatoire mais on reste dans les limites de la fenêtre
-            const padding = 50;
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding);
+            // Limites pour que le bouton ne sorte JAMAIS de l'écran
+            // On garde une marge de 100px sur les bords
+            const margin = 100;
+            const maxX = window.innerWidth - noBtn.offsetWidth - margin;
+            const maxY = window.innerHeight - noBtn.offsetHeight - margin;
             
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+            // On génère une position aléatoire dans ces limites
+            const randomX = Math.max(margin, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(margin, Math.floor(Math.random() * maxY));
+            
+            // On enlève le transform initial pour utiliser top/left
+            noBtn.style.transform = "none"; 
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
         }
 
+        // Événements pour PC et Mobile
         noBtn.addEventListener('mouseover', moveButton);
         noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Empêche le clic accidentel sur mobile
+            e.preventDefault();
             moveButton();
         });
 
         function celebrate() {
+            // Pluie de cœurs
             setInterval(createHeart, 300);
+
+            // Changement de contenu final
             document.body.innerHTML = `
-                <div style="text-align:center; padding: 20px;">
-                    <h1 style="font-size: 3rem;">YAY ! 💖</h1>
+                <div style="text-align:center; padding: 20px; animation: fadeIn 1s;">
+                    <h1 style="font-size: 2.5rem;">YAY ! 💖</h1>
                     <img src="https://media.tenor.com/X-n_T9XJm_BAAAAM/milk-and-mocha-bear-couple.gif" style="border-radius:20px; width:280px;">
-                    <p style="font-size: 1.5rem; color: #d53f8c; font-weight: bold; margin-top: 20px;">Je t'aime ! ❤️</p>
+                    <p style="font-size: 1.5rem; color: #d53f8c; font-weight: bold; margin-top: 20px;">
+                        Je savais pertinemment que t'allais pas cliquer sur non ! 🥰
+                    </p>
                 </div>
             `;
         }
